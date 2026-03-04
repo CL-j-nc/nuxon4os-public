@@ -1,0 +1,9 @@
+name = "semantic-analyzer-worker"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+# Semantic data storage
+[[d1_databases]]
+binding = "SEMANTIC_DB"
+database_name = "semantic-db"
+database_id = "6c2415cf-70e5-4fe8-a275-4511429ac32f"

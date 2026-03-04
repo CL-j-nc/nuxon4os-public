@@ -1,0 +1,7 @@
+name = "rate-limiter"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "df20b59955d54f84b83a89999c041647"

@@ -1,0 +1,13 @@
+name = "webhook-gateway"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[[queues.producers]]
+queue = "webhook-events"
+binding = "WEBHOOK_QUEUE"
+
+# Secrets (set via wrangler secret put):
+# TELEGRAM_WEBHOOK_SECRET
+# STRIPE_WEBHOOK_SECRET
+# TRADINGVIEW_SECRET
+# GATEWAY_API_KEY
