@@ -1,0 +1,62 @@
+name = "ai-agent-core"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+# === Queues ===
+# 输出决策到 Executor
+[[queues.producers]]
+queue = "ai-decisions"
+binding = "DECISION_QUEUE"
+
+# 消费 feedback（self loop）
+[[queues.consumers]]
+queue = "ai-feedback"
+max_batch_size = 5
+max_batch_timeout = 10
+max_retries = 2
+dead_letter_queue = "failed-events"
+
+# === D1 ===
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+# === Durable Objects ===
+[durable_objects]
+bindings = [
+  { name = "AGENT_STATE", class_name = "AgentStateDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["AgentStateDO"]
+
+# === Service Bindings ===
+[[services]]
+binding = "MODEL_ROUTER"
+service = "ai-model-router"
+
+[[services]]
+binding = "MEMORY"
+service = "ai-memory-worker"
+
+[[services]]
+binding = "PLANNER"
+service = "ai-planner-worker"
+
+# === Event Queue (emit reasoning events + self-review) ===
+[[queues.producers]]
+queue = "webhook-events"
+binding = "WEBHOOK_QUEUE"
+
+# === Feature Flags ===
+[vars]
+RUNTIME_V2 = "false"  # Set to "true" to enable stateless reasoning (action_schema)
+
+# === Cron Triggers ===
+[triggers]
+crons = [
+  "*/5 * * * *",  # 每 5 分钟：self-review heartbeat
+]

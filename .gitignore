@@ -1,22 +1,9 @@
-# Dependencies
 node_modules/
-package-lock.json
-
-# Build artifacts
 .wrangler/
-
-# Secrets
 .env
 .env.*
 .dev.vars
-*.pem
-*.key
-
-# IDE
-.vscode/
-.idea/
-*.swp
-
-# OS
 .DS_Store
-Thumbs.db
+*.log
+coverage/
+tmp/

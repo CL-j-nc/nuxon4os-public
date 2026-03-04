@@ -1,0 +1,12 @@
+name = "notifier-worker"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+APP_ENV = "production"
+
+# Secrets (wrangler secret put):
+# TELEGRAM_URL    (e.g. https://api.telegram.org/bot<TOKEN>/sendMessage)
+# TELEGRAM_CHAT_ID
+# NOTION_TOKEN

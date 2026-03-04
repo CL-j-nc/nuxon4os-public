@@ -1,0 +1,18 @@
+{
+  "_comment": "Structured route table — source → routing rule. Consumed by event-router.",
+  "ai-agent":      { "agent": true },
+  "tradingview":   { "agent": true },
+  "telegram-cmd":  { "agent": true },
+  "telegram":      { "notify": true },
+  "alert":         { "notify": true },
+  "stripe":        { "notify": true },
+  "notion":        { "notify": true },
+  "memo":          { "notify": true },
+  "ai":            { "url": "__AI_PROXY_URL__", "isolated": true, "timeout": 30000 },
+  "db":            { "url": "__DB_API_URL__" },
+  "ocr":           { "url": "__OCR_WORKER_URL__" },
+  "payment":       { "url": "__PAYMENT_WORKER_URL__" },
+  "screenshots":   { "url": "__SCREENSHOTS_WORKER_URL__" },
+  "claude-code":   { "notify": true },
+  "openai":        { "agent": true, "notify": true }
+}

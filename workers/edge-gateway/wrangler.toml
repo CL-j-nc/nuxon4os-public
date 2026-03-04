@@ -1,0 +1,12 @@
+name = "edge-gateway"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+[[queues.producers]]
+queue = "webhook-events"
+binding = "EVENT_QUEUE"

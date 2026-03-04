@@ -1,0 +1,11 @@
+name = "notion-webhook-worker"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+APP_ENV = "production"
+GATEWAY_URL = "https://webhook-gateway.YOUR_SUBDOMAIN.workers.dev/"
+
+# Secrets (via `wrangler secret put`):
+# WEBHOOK_SECRET — 与 webhook-gateway 相同的 secret

@@ -1,0 +1,40 @@
+name = "ai-executor-worker"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+# 消费 AI 决策
+[[queues.consumers]]
+queue = "ai-decisions"
+max_batch_size = 5
+max_batch_timeout = 10
+max_retries = 2
+dead_letter_queue = "failed-events"
+
+# 发送 feedback 回 Agent Core
+[[queues.producers]]
+queue = "ai-feedback"
+binding = "FEEDBACK_QUEUE"
+
+# Emit execution events (v2)
+[[queues.producers]]
+queue = "webhook-events"
+binding = "WEBHOOK_QUEUE"
+
+# === D1 (v2: execution_ledger, action_allowlist) ===
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+# === Service Bindings ===
+[[services]]
+binding = "NOTIFIER"
+service = "notifier-worker"
+
+[[services]]
+binding = "GOVERNANCE"
+service = "governance-worker"
+
+# Secrets:
+# ADMIN_KEY — for governance-worker auth

@@ -1,0 +1,31 @@
+{
+  "name": "@nuxon4os/sdk",
+  "version": "1.0.0",
+  "description": "Nuxon 4 OS SDK — AI automation in one API call",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "LICENSE", "PATENTS"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["nuxon4os", "ai", "automation", "webhook", "agent"],
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CL-j-nc/nuxon4os.git",
+    "directory": "sdk"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "CL-j-nc",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}

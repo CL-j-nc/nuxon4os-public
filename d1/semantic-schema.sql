@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS semantic_units (
   dimension TEXT NOT NULL,
   value TEXT NOT NULL,
   confidence REAL DEFAULT 1.0,
-  FOREIGN KEY (event_id) REFERENCES semantic_events(event_id)
+  FOREIGN KEY (event_id) REFERENCES semantic_events(event_id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_su_event ON semantic_units(event_id);

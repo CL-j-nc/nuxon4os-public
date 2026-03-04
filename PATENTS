@@ -1,0 +1,167 @@
+PATENT & INTELLECTUAL PROPERTY PROTECTION NOTICE
+
+Nuxon 4 OS — AI Organization Operating Console
+Copyright (c) 2024-2026 CL-j-nc. All Rights Reserved.
+
+════════════════════════════════════════════════════════════════
+
+1. PROTECTED INVENTIONS
+
+The following inventions, methods, architectures, and workflow patterns
+(collectively "Protected IP") are the exclusive intellectual property
+of the Licensor:
+
+  (a) The AI decision pipeline: event ingestion → rule matching →
+      AI inference → action recommendation → rule evolution loop;
+
+  (b) The self-learning rule evolution engine: automatic distillation
+      of high-frequency AI decisions into deterministic rules to
+      achieve near-zero marginal cost over time;
+
+  (c) The semantic event decomposition system: rule-based extraction
+      of structured semantic units from unstructured webhook payloads
+      without AI token consumption;
+
+  (d) The multi-level agent hierarchy (L1-L4) with automated agent
+      proposal, approval, and deployment lifecycle;
+
+  (e) The Universal Connector Architecture: adapter-spec-driven
+      event normalization supporting push (webhook) and pull (polling)
+      with configurable cursor strategies;
+
+  (f) The edge agent architecture: cloud-to-edge task dispatch,
+      heartbeat registration, and bidirectional control protocol;
+
+  (g) The governance and risk scoring engine: policy-based automated
+      approval flow with confidence thresholds;
+
+  (h) Any workflow pattern, data flow sequence, architectural design,
+      or algorithmic method that can be derived, inferred, or
+      reverse-engineered from the source code, documentation,
+      API behavior, SDK interface, or runtime observation of the
+      Licensed Work.
+
+2. NO PATENT LICENSE GRANTED
+
+No patent license is granted under this notice or the accompanying
+Business Source License 1.1. All patent rights are expressly reserved
+by the Licensor.
+
+Access to the source code does NOT constitute a grant of any patent
+rights, trade secret rights, or any right to practice, implement,
+reproduce, or create functional equivalents of the Protected IP.
+
+3. PROHIBITED ACTIVITIES
+
+The following activities are strictly prohibited without a separate
+written commercial license from the Licensor:
+
+  (a) COPYING OR CLONING: Creating any software, service, or system
+      that implements, replicates, or substantially imitates any of
+      the Protected IP, whether by direct code copying, clean-room
+      reimplementation, or functional equivalence;
+
+  (b) REVERSE ENGINEERING OF PATTERNS: Analyzing, studying, or
+      observing the Licensed Work (including its source code, APIs,
+      runtime behavior, logs, documentation, or output) for the
+      purpose of extracting, reconstructing, or recreating any
+      workflow pattern, architectural design, algorithm, or method
+      embodied in the Protected IP;
+
+  (c) AI TRAINING & EXTRACTION: Using any part of the Licensed Work
+      — including but not limited to source code, documentation,
+      configuration files, API schemas, commit history, issue
+      discussions, or runtime output — as training data, fine-tuning
+      data, retrieval corpus, or prompt context for any artificial
+      intelligence system, machine learning model, large language
+      model, code generation tool, or any derivative or successor
+      technology thereof;
+
+  (d) AUTOMATED EXTRACTION: Using any automated tool, crawler,
+      scraper, AI agent, code analysis tool, or static/dynamic
+      analysis system to extract architectural patterns, workflow
+      logic, or design decisions from the Licensed Work;
+
+  (e) DERIVATIVE WORKS: Creating any system that achieves
+      substantially similar functionality through knowledge gained
+      by studying the Licensed Work, even if implemented in a
+      different programming language, platform, or architecture;
+
+  (f) INTERMEDIARY FACILITATION: Providing consulting, analysis,
+      architectural advice, or technical documentation to any third
+      party that would enable them to reproduce, approximate, or
+      compete with any aspect of the Protected IP.
+
+4. EVALUATION LICENSE
+
+Enterprises and individuals may use the Licensed Work free of charge
+solely for internal evaluation, testing, and proof-of-concept purposes,
+subject to ALL of the following conditions:
+
+  (a) Evaluation use must not exceed 90 days per entity without
+      written extension from the Licensor;
+
+  (b) No aspect of the Protected IP may be incorporated into,
+      adapted for, or used to inform the design of any other
+      product, service, or system — whether internal or external;
+
+  (c) Evaluation does not grant any right to reverse engineer,
+      extract patterns from, or create derivative works based on
+      knowledge gained during evaluation;
+
+  (d) Upon completion of evaluation, the evaluating entity must
+      either purchase a commercial license or cease all use and
+      destroy all copies and derivative materials.
+
+5. ENFORCEMENT & REMEDIES
+
+  (a) Any violation of Sections 2-4 shall be deemed willful patent
+      infringement, trade secret misappropriation, and copyright
+      infringement, entitling the Licensor to seek injunctive relief,
+      statutory and actual damages, disgorgement of profits, and
+      attorney fees in any jurisdiction;
+
+  (b) The Licensor reserves the right to pursue criminal remedies
+      under applicable trade secret protection laws, including but
+      not limited to the U.S. Defend Trade Secrets Act (18 U.S.C.
+      § 1836), the Economic Espionage Act (18 U.S.C. § 1831-1839),
+      and equivalent statutes in other jurisdictions;
+
+  (c) If any entity (including individuals, corporations, partnerships,
+      AI systems operated by any entity, or any governmental body)
+      initiates patent litigation against the Licensor alleging that
+      the Licensed Work infringes any patent, all rights granted
+      under this notice and the accompanying License shall terminate
+      immediately and retroactively.
+
+6. AI SYSTEMS NOTICE
+
+Any artificial intelligence system, code generation tool, automated
+agent, or similar technology that accesses, processes, or analyzes
+any portion of the Licensed Work is bound by the same restrictions
+as human users. Operators of such systems are jointly and severally
+liable for any violations committed by their AI systems.
+
+The Licensor explicitly does NOT consent to the use of any part of
+this work for AI training, model fine-tuning, retrieval-augmented
+generation, or any form of machine learning, whether supervised,
+unsupervised, or reinforcement-based.
+
+7. SEVERABILITY
+
+If any provision of this notice is held to be unenforceable, the
+remaining provisions shall remain in full force and effect.
+
+8. GOVERNING LAW
+
+This notice shall be governed by and construed in accordance with
+the laws of the People's Republic of China, without regard to
+conflicts of law principles. Any disputes shall be subject to the
+exclusive jurisdiction of the courts of the People's Republic of China.
+
+════════════════════════════════════════════════════════════════
+
+FOR COMMERCIAL LICENSING:
+Contact the Licensor at the repository listed in the Licensed Work.
+
+Copyright (c) 2024-2026 CL-j-nc. ALL RIGHTS RESERVED.

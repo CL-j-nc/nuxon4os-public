@@ -1,0 +1,47 @@
+name = "dashboard-api-worker"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+CORS_ORIGIN = "*"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+[[queues.producers]]
+queue = "webhook-events"
+binding = "WEBHOOK_QUEUE"
+
+[[services]]
+binding = "FACTORY"
+service = "agent-factory-worker"
+
+[[services]]
+binding = "TENANT_FACTORY"
+service = "tenant-factory-worker"
+
+[[services]]
+binding = "GOVERNANCE"
+service = "governance-worker"
+
+[[services]]
+binding = "MODEL_ROUTER"
+service = "ai-model-router"
+
+[[services]]
+binding = "CONNECTOR_REGISTRY"
+service = "connector-registry"
+
+[[services]]
+binding = "EDGE_GATEWAY"
+service = "edge-gateway"
+
+[[r2_buckets]]
+binding = "SYSTEM_ARCHIVE"
+bucket_name = "cloudbrain-system-archive"
+
+# Secrets (set via: wrangler secret put PASSWORD_SALT)
+# PASSWORD_SALT — used for password hashing; must match across dashboard-api-worker and tenant-factory-worker

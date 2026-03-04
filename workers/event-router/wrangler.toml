@@ -1,0 +1,43 @@
+name = "event-router"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[[queues.consumers]]
+queue = "webhook-events"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 3
+dead_letter_queue = "failed-events"
+
+# DLQ producer（手动发送失败消息）
+[[queues.producers]]
+queue = "failed-events"
+binding = "DLQ"
+
+# D1 数据库（创建后填入 ID）
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+# Durable Object（与 Gateway 共享）
+[durable_objects]
+bindings = [
+  { name = "IDEMPOTENCY", class_name = "IdempotencyDO", script_name = "webhook-gateway" }
+]
+
+# Notifier Worker Service Binding
+[[services]]
+binding = "NOTIFIER"
+service = "notifier-worker"
+
+# AI Agent Core Service Binding
+[[services]]
+binding = "AGENT_CORE"
+service = "ai-agent-core"
+
+# Event Log Worker Service Binding (sensor_events 全量落库)
+[[services]]
+binding = "EVENT_LOG"
+service = "event-log-worker"

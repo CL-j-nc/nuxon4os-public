@@ -1,0 +1,21 @@
+name = "telegram-command-worker"
+# account_id loaded from CLOUDFLARE_ACCOUNT_ID env or wrangler login
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+APP_ENV = "production"
+
+[[queues.producers]]
+queue = "webhook-events"
+binding = "WEBHOOK_QUEUE"
+
+# Service Binding — 直连 AI Agent Core，query 类消息同步拿回复
+[[services]]
+binding = "AGENT_CORE"
+service = "ai-agent-core"
+
+# Secrets (via `wrangler secret put`):
+# TELEGRAM_BOT_TOKEN       — Bot token for sending replies
+# TELEGRAM_ADMIN_ID        — 7178860703 (only this user allowed)
+# TELEGRAM_WEBHOOK_SECRET  — custom secret for webhook verification
