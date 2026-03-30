@@ -14,5 +14,6 @@
   "payment":       { "url": "__PAYMENT_WORKER_URL__" },
   "screenshots":   { "url": "__SCREENSHOTS_WORKER_URL__" },
   "claude-code":   { "notify": true },
+  "chatgpt":       { "notify": true },
   "openai":        { "agent": true, "notify": true }
 }

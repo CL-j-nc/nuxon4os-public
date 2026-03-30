@@ -32,6 +32,10 @@ binding = "MODEL_ROUTER"
 service = "ai-model-router"
 
 [[services]]
+binding = "EVOLUTION_WORKER"
+service = "evolution-worker"
+
+[[services]]
 binding = "CONNECTOR_REGISTRY"
 service = "connector-registry"
 
@@ -39,9 +43,39 @@ service = "connector-registry"
 binding = "EDGE_GATEWAY"
 service = "edge-gateway"
 
+[[services]]
+binding = "CONNECTOR_MARKETPLACE"
+service = "connector-marketplace"
+
+[[services]]
+binding = "MAPPING_ENGINE"
+service = "mapping-engine"
+
+[[services]]
+binding = "STATE_UPDATER"
+service = "state-updater"
+
+[[services]]
+binding = "WEBHOOK_GATEWAY"
+service = "webhook-gateway"
+
+[[services]]
+binding = "CLAUDE_CODE_HANDLER"
+service = "claude-code-handler"
+
 [[r2_buckets]]
 binding = "SYSTEM_ARCHIVE"
 bucket_name = "cloudbrain-system-archive"
+
+# Durable Objects
+[[durable_objects.bindings]]
+name = "CHAT_SESSION"
+class_name = "ChatSessionDO"
+script_name = "dashboard-api-worker"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChatSessionDO"]
 
 # Secrets (set via: wrangler secret put PASSWORD_SALT)
 # PASSWORD_SALT — used for password hashing; must match across dashboard-api-worker and tenant-factory-worker

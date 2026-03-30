@@ -1,4 +1,8 @@
--- CloudBrain — AI Organization Operating Console
+-- ⚠️ DEPRECATED — Use d1/000-bootstrap.sql instead
+-- This standalone file is superseded by the unified bootstrap schema.
+-- Kept for reference only. Do NOT run directly.
+--
+-- Nuxon 4 OS — AI Organization Operating Console
 -- Copyright (c) 2024-2026 CL-j-nc. All Rights Reserved.
 -- Licensed under the Business Source License 1.1 (BSL). See LICENSE file.
 

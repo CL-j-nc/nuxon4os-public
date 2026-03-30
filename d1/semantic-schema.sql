@@ -1,3 +1,7 @@
+-- ⚠️ DEPRECATED — Use d1/000-bootstrap.sql instead
+-- This standalone file is superseded by the unified bootstrap schema.
+-- Kept for reference only. Do NOT run directly.
+--
 -- Semantic Analyzer schema
 -- Apply with: wrangler d1 execute semantic-db --file=d1/semantic-schema.sql
 

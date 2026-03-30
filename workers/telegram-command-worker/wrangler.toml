@@ -15,6 +15,11 @@ binding = "WEBHOOK_QUEUE"
 binding = "AGENT_CORE"
 service = "ai-agent-core"
 
+# Service Binding — 直连 Claude Code Handler，提交/查询 Claude 任务
+[[services]]
+binding = "CLAUDE_CODE_HANDLER"
+service = "claude-code-handler"
+
 # Secrets (via `wrangler secret put`):
 # TELEGRAM_BOT_TOKEN       — Bot token for sending replies
 # TELEGRAM_ADMIN_ID        — 7178860703 (only this user allowed)

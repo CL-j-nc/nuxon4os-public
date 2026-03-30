@@ -18,48 +18,52 @@ Event arrives → Rule Engine (0 tokens) → Match? → Execute deterministicall
 
 ## Architecture
 
-19 Cloudflare Workers running at the edge, communicating via Queues and Service Bindings:
+27 Cloudflare Workers across 5 deployment layers, communicating via Queues and Service Bindings:
 
 ```
-                         ┌──────────────────────────────────────────┐
-                         │          Cloudflare Edge Network          │
-                         ├──────────────────────────────────────────┤
-                         │                                          │
-Webhook ──▸ webhook-gateway ──▸ Queue ──▸ event-router             │
-                                              │                     │
-                              ┌───────────────┼───────────────┐     │
-                              ▼               ▼               ▼     │
-                        ai-agent-core   notifier-worker  event-log  │
-                              │                                     │
-                    ┌─────────┼─────────┐                           │
-                    ▼         ▼         ▼                           │
-              ai-model-  ai-planner  ai-memory                     │
-              router     worker      worker                        │
-                                                                    │
-              observer-worker ──▸ Proposals ──▸ Notifications       │
-              evolution-worker ──▸ Rules ──▸ Rule Engine            │
-              governance-worker ──▸ Policy enforcement              │
-                                                                    │
-                         ├──────────────────────────────────────────┤
-                         │  D1 (SQLite)  │  R2  │  Queues  │  DO   │
-                         └──────────────────────────────────────────┘
+                         ┌──────────────────────────────────────────────────┐
+                         │            Cloudflare Edge Network               │
+                         ├──────────────────────────────────────────────────┤
+                         │                                                  │
+  Push ──▸ webhook-gateway ──▸ Queue ──▸ event-router ──▸ rule match?      │
+  Pull ◂── poller-worker ────────────────────┘     │          │            │
+                                                   │     ┌────┴────┐       │
+                          semantic-analyzer ◂───────┘     ▼        ▼       │
+                                                   ai-agent   execute     │
+                          mapping-engine ◂── Truth Layer  │    (0 tok)    │
+                          state-updater  ◂── Episodes     │               │
+                                                   ┌──────┴──────┐        │
+                                                   ▼      ▼      ▼        │
+                                              planner  memory  executor   │
+                                                                          │
+                          evolution-worker ──▸ AI→Rule distillation        │
+                          observer-worker ──▸ Bottleneck → Proposals       │
+                          meta-agent-worker ──▸ Health scoring + retire    │
+                          agent-factory ──▸ Agent lifecycle management     │
+                          governance-worker ──▸ Risk scoring + approval    │
+                          edge-gateway ──▸ Cloud↔Edge bidirectional ctrl   │
+                                                                          │
+                         ├──────────────────────────────────────────────────┤
+                         │  D1 (53 tables)  │  R2  │  4 Queues  │  2 DOs  │
+                         └──────────────────────────────────────────────────┘
 
-Dashboard (Cloudflare Pages)  ·  SDK (@nuxon4os/sdk)
+  Factory Dashboard (Next.js → CF Pages)  ·  SDK (@nuxon4os/sdk)  ·  Edge Agent (Node.js)
 ```
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Compute | Cloudflare Workers (21 services) |
-| Database | Cloudflare D1 (SQLite at edge) |
+| Compute | 27 Cloudflare Workers (5-layer deployment) |
+| Database | Cloudflare D1 (53 tables, SQLite at edge) |
 | Storage | Cloudflare R2 |
-| Queue | Cloudflare Queues |
-| State | Durable Objects (idempotency, agent state) |
+| Queue | Cloudflare Queues (webhook-events, ai-decisions, ai-feedback, failed-events DLQ) |
+| State | Durable Objects (IdempotencyDO, AgentStateDO) |
 | AI Models | GPT-4o, Gemini 2.0 Flash, Llama 3.3, Qwen 3 (via model router) |
-| Frontend | React 19 + Tailwind CSS + Vite → Cloudflare Pages |
+| Frontend | Next.js App Router factory dashboard → Cloudflare Pages |
 | Billing | Stripe (Checkout + Customer Portal) |
 | SDK | TypeScript, CJS/ESM/DTS, zero runtime deps |
+| Edge | Edge Agent — zero-dep Node.js agent for private networks |
 
 ## Quick Start
 
@@ -103,11 +107,11 @@ wrangler d1 execute automation-events-db --file=d1/ai-schema.sql
 # ... (see d1/ for all schema files)
 
 # 4. Deploy all workers
-bash scripts/deploy-v3.sh
+bash scripts/deploy-factory-dashboard.sh
 # Or push to main — GitHub Actions deploys automatically
 
 # 5. Build and deploy dashboard
-cd apps/dashboard && npm install && npm run build
+cd apps/factory-dashboard && npm install && npm run build
 wrangler pages deploy dist --project-name=nuxon4os-dashboard
 ```
 
@@ -115,35 +119,62 @@ wrangler pages deploy dist --project-name=nuxon4os-dashboard
 
 ```
 nuxon4os/
-├── workers/                    # 21 Cloudflare Workers
-│   ├── webhook-gateway/        #   Event ingestion + idempotency
-│   ├── event-router/           #   Queue consumer + routing
-│   ├── ai-agent-core/          #   AI reasoning service
-│   ├── ai-model-router/        #   Multi-model selection + budget
-│   ├── ai-executor-worker/     #   Deterministic execution runtime
-│   ├── ai-planner-worker/      #   Task decomposition
-│   ├── ai-memory-worker/       #   Decision memory
-│   ├── evolution-worker/       #   Auto rule learning (daily)
-│   ├── observer-worker/        #   System self-review (hourly)
-│   ├── governance-worker/      #   Policy engine + risk scoring
-│   ├── notifier-worker/        #   Telegram / Notion notifications
-│   ├── telegram-command-worker/ #  Bidirectional Telegram control
-│   ├── agent-factory-worker/   #   Agent proposal → deployment
-│   ├── tenant-factory-worker/  #   Multi-tenant provisioning
-│   ├── meta-agent-worker/      #   L4 meta-agent coordination
-│   ├── dashboard-api-worker/   #   Dashboard API (~1500 lines)
-│   ├── event-log-worker/       #   Full event audit trail
-│   ├── claude-code-handler/    #   Claude Code hooks integration
-│   ├── rate-limiter/           #   Request rate limiting
-│   ├── semantic-analyzer/      #   Rule-based semantic decomposition
-│   └── shared/                 #   Event schema, routes, types
-├── apps/dashboard/             # React Dashboard (15 pages)
-├── sdk/                        # @nuxon4os/sdk
-├── d1/                         # D1 schemas + migrations (9 files)
-├── durable-objects/            # IdempotencyDO, AgentStateDO
-├── scripts/                    # Deploy + setup scripts
-├── .github/workflows/          # CI/CD (layered deploy)
-└── LICENSE                     # BSL 1.1
+├── workers/                        # 27 Cloudflare Workers
+│   ├── webhook-gateway/            #   L0  Event ingestion + idempotency
+│   ├── rate-limiter/               #   L0  Request rate limiting
+│   ├── connector-registry/         #   L0  Adapter spec registry
+│   ├── connector-marketplace/      #   L0  Community connector marketplace
+│   ├── semantic-analyzer/          #   L0  Zero-token semantic decomposition
+│   ├── notifier-worker/            #   L0  Telegram / Notion notifications
+│   ├── event-log-worker/           #   L0  Full event audit trail
+│   ├── ai-model-router/            #   L0  Multi-model selection + budget
+│   ├── telegram-command-worker/    #   L0  Bidirectional Telegram control
+│   ├── notion-webhook-worker/      #   L0  Notion integration
+│   ├── poller-worker/              #   L1  Pull-mode polling (5 cursor strategies)
+│   ├── event-router/               #   L1  Queue consumer + rule matching
+│   ├── ai-memory-worker/           #   L1  Decision memory
+│   ├── ai-planner-worker/          #   L1  Task decomposition
+│   ├── ai-executor-worker/         #   L1  Deterministic execution
+│   ├── mapping-engine/             #   L1  Semantic compiler (Truth Layer)
+│   ├── state-updater/              #   L1  Entity/Episode state memory
+│   ├── ai-agent-core/              #   L2  AI reasoning orchestrator
+│   ├── observer-worker/            #   L3  System self-review (hourly)
+│   ├── evolution-worker/           #   L3  AI→Rule distillation (daily)
+│   ├── meta-agent-worker/          #   L3  L4 health scoring + retirement
+│   ├── agent-factory-worker/       #   L3  Agent proposal → deployment
+│   ├── governance-worker/          #   L3  Policy engine + risk scoring
+│   ├── edge-gateway/               #   L3  Cloud↔Edge bidirectional control
+│   ├── claude-code-handler/        #   L3  Claude Code hooks integration
+│   ├── tenant-factory-worker/      #   L3  Multi-tenant provisioning
+│   ├── dashboard-api-worker/       #   L4  Dashboard API gateway
+│   └── shared/                     #       Event schema, adapter runtime, truth anchor
+│
+├── apps/
+│   ├── dashboard/                  # React 18 + Vite Dashboard (23 pages)
+│   │   ├── src/pages/              #   Maestro, Overview, Events, Agents, Connectors,
+│   │   │                           #   Evolution, Governance, EdgeAgents, Marketplace,
+│   │   │                           #   Settings, Usage, Cost, Tenants, etc.
+│   │   ├── src/components/         #   Layout, UI components, Maestro 3D scene
+│   │   ├── src/lib/                #   API client, hooks, i18n
+│   │   └── tools/launch-bomb/      #   Automated demo video pipeline
+│   └── factory-dashboard/          # Primary Next.js factory dashboard
+│
+├── sdk/                            # @nuxon4os/sdk (TypeScript, CJS/ESM/DTS)
+├── edge-agent/                     # Lightweight Node.js agent (zero deps, single file)
+├── durable-objects/                # IdempotencyDO, AgentStateDO
+├── d1/                             # 000-bootstrap.sql + 12 migration files
+├── packs/                          # Versioned mapping rulesets (Truth Layer v2)
+├── scripts/                        # deploy-all.sh, migrate.sh, obfuscate.mjs
+├── tools/                          # Claude Code hook, macOS app monitor
+│   ├── hooks/claude-code-hook.sh   #   Event bus hook for Claude Code
+│   └── monitors/app-monitor.mjs   #   Desktop app process monitor
+├── tests/                          # Vitest (4 test files, 51 tests)
+├── docs/                           # Project manual, refactor plan, copyright materials
+├── .github/workflows/              # CI/CD (5-layer sequential deploy)
+├── CONSTITUTION.md                 # 10 non-negotiable system rules
+├── CLAUDE.md                       # Claude Code project guidance
+├── LICENSE                         # BSL 1.1 (→ Apache 2.0 in 2029)
+└── PATENTS                         # Patent protection notice
 ```
 
 ## Key Design Decisions
@@ -158,14 +189,14 @@ nuxon4os/
 
 ## CI/CD
 
-Push to `main` triggers layered deployment via GitHub Actions:
+Push to `main` triggers 5-layer sequential deployment via GitHub Actions:
 
 ```
-Layer 0: gateway, telegram, notifier, event-log, model-router  (no deps)
-Layer 1: memory, planner, executor, event-router                (deps on L0)
-Layer 2: ai-agent-core                                          (deps on L1)
-Layer 3: observer, evolution, meta-agent, factory, governance   (deps on L2)
-Final:   dashboard-api → SDK build → Dashboard build + Pages deploy
+Layer 0: gateway, registry, marketplace, semantic, telegram, notifier, event-log, model-router, rate-limiter, notion  (10 workers, no deps)
+Layer 1: poller, memory, planner, executor, event-router, mapping-engine, state-updater                               (7 workers, deps on L0)
+Layer 2: ai-agent-core                                                                                                (1 worker, deps on L1)
+Layer 3: observer, evolution, meta-agent, factory, governance, edge-gateway, claude-code, tenant-factory              (8 workers, deps on L2)
+Layer 4: dashboard-api → SDK build → factory dashboard build + Pages deploy                                           (1 worker + frontend)
 ```
 
 Requires `CF_API_TOKEN` secret in GitHub repo settings.

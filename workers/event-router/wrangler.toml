@@ -41,3 +41,13 @@ service = "ai-agent-core"
 [[services]]
 binding = "EVENT_LOG"
 service = "event-log-worker"
+
+# Mapping Engine (Semantic Compiler) — compiles events to EventIR
+[[services]]
+binding = "MAPPING_ENGINE"
+service = "mapping-engine"
+
+# State Updater — subject/episode state memory
+[[services]]
+binding = "STATE_UPDATER"
+service = "state-updater"

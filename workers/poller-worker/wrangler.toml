@@ -1,6 +1,6 @@
 name = "poller-worker"
 main = "src/index.js"
-compatibility_date = "2024-09-23"
+compatibility_date = "2024-12-01"
 
 [[d1_databases]]
 binding = "DB"
@@ -15,3 +15,12 @@ binding = "EVENT_QUEUE"
 # Cron trigger — every 5 minutes
 [triggers]
 crons = ["*/5 * * * *"]
+
+# Service binding: trigger claude-code-handler task execution
+[[services]]
+binding = "CLAUDE_CODE_HANDLER"
+service = "claude-code-handler"
+
+[[services]]
+binding = "DASHBOARD_API"
+service = "dashboard-api-worker"

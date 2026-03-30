@@ -1,0 +1,8 @@
+name = "conversation-surface"
+main = "src/cloudflare.ts"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"

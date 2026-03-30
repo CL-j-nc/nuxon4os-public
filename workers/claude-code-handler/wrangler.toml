@@ -3,15 +3,32 @@ name = "claude-code-handler"
 main = "src/index.js"
 compatibility_date = "2024-12-01"
 
+[ai]
+binding = "AI"
+
+# Task processing triggered by poller-worker via service binding (POST /cron) every 5 min.
+# Also accepts direct HTTP calls and has a scheduled() handler for future use.
+# No dedicated cron trigger allocated (Cloudflare free tier: max 5 cron slots, all used).
+
+# D1 database binding (shared across all workers)
 [[d1_databases]]
 binding = "DB"
 database_name = "automation-events-db"
 database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
 
+# Queue producer (legacy event-router compatibility)
 [[queues.producers]]
 queue = "webhook-events"
 binding = "WEBHOOK_QUEUE"
 
+# Service bindings
 [[services]]
 binding = "NOTIFIER"
 service = "notifier-worker"
+
+# Secrets (set via `wrangler secret put`):
+#   NVIDIA_API_KEY     — NVIDIA NIM API key (primary, free tier, OpenAI-compatible)
+#   GITHUB_TOKEN       — GitHub personal access token (repo scope)
+#   CF_API_TOKEN       — Cloudflare API token (Workers deploy)
+#   CF_ACCOUNT_ID      — Cloudflare account ID
+#   ANTHROPIC_API_KEY  — (optional fallback) Anthropic API key for Claude

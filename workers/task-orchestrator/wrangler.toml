@@ -1,0 +1,37 @@
+name = "task-orchestrator"
+main = "src/cloudflare.ts"
+compatibility_date = "2024-12-01"
+
+[observability]
+enabled = true
+
+[[durable_objects.bindings]]
+name = "RUNNER_SESSIONS"
+class_name = "RunnerSessionDO"
+
+[[durable_objects.bindings]]
+name = "CLOUD_RUNNERS"
+class_name = "CloudRunnerDO"
+
+[[durable_objects.bindings]]
+name = "CODEX_RUNNER_CONTAINER"
+class_name = "CodexRunnerContainer"
+
+[[containers]]
+class_name = "CodexRunnerContainer"
+image = "./container/Dockerfile"
+instance_type = "lite"
+max_instances = 1
+
+[[d1_databases]]
+binding = "DB"
+database_name = "automation-events-db"
+database_id = "dd666f84-ad60-4943-87fb-4bd36144e7d9"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RunnerSessionDO"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["CloudRunnerDO", "CodexRunnerContainer"]

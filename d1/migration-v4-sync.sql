@@ -1,5 +1,5 @@
 -- Migration v4: Cross-AI sync snapshots
--- Enables Claude Code ↔ ChatGPT progress sharing through CloudBrain pipeline
+-- Enables Claude Code ↔ ChatGPT progress sharing through Nuxon 4 OS pipeline
 
 CREATE TABLE IF NOT EXISTS sync_snapshots (
   id TEXT PRIMARY KEY,

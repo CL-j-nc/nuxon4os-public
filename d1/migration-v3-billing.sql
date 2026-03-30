@@ -1,10 +1,10 @@
--- CloudBrain — AI Organization Operating Console
+-- Nuxon 4 OS — AI Organization Operating Console
 -- Copyright (c) 2024-2026 CL-j-nc. All Rights Reserved.
 -- Licensed under the Business Source License 1.1 (BSL). See LICENSE file.
 
 -- ═══════════════════════════════════════════════════════════
 -- Migration V3: Billing & Usage Metering
--- CloudBrain v1 — Revenue MVP
+-- Nuxon 4 OS v1 — Revenue MVP
 -- ═══════════════════════════════════════════════════════════
 
 -- ─── 1. Usage Daily (per-tenant per-key daily rollup) ────

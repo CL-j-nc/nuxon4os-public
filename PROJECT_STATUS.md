@@ -53,7 +53,7 @@
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│  Dashboard (Cloudflare Pages)  │  SDK (@nuxon4os/sdk)     │
+│  Factory Dashboard (Cloudflare Pages) │ SDK (@nuxon4os/sdk) │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -63,7 +63,7 @@
 - **Storage**: Cloudflare R2 (snapshots, exports)
 - **Queue**: Cloudflare Queues (event pipeline)
 - **State**: Cloudflare Durable Objects (idempotency, agent state)
-- **Frontend**: React 19 + Tailwind CSS + Vite (Cloudflare Pages)
+- **Frontend**: Next.js App Router factory dashboard (Cloudflare Pages)
 - **SDK**: TypeScript, CJS/ESM/DTS, zero runtime deps (@nuxon4os/sdk)
 - **Billing**: Stripe (Checkout + Customer Portal + Webhooks)
 
@@ -121,10 +121,7 @@
 
 ```
 nuxon4os/
-├── apps/dashboard/           # React Dashboard (15 pages)
-│   ├── src/pages/            # Landing, Login, Onboarding, Usage, Settings...
-│   ├── src/lib/              # api.ts, i18n.ts, hooks.ts
-│   └── src/components/       # Layout.tsx
+├── apps/factory-dashboard/   # Primary factory dashboard (Next.js)
 ├── workers/                  # 21 Cloudflare Workers
 │   ├── dashboard-api-worker/ # 核心 API (1500 行)
 │   ├── webhook-gateway/      # 事件入口
